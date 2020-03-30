@@ -1,0 +1,80 @@
+""""""""""""""""""SOAL NO.1""""""""""""""""""""""""""""
+
+mysql> select count(contactFirstName) as Customers, count(DISTINCT city) as Cities, count(DISTINCT country) as Countries from customers;
++-----------+--------+-----------+
+| Customers | Cities | Countries |
++-----------+--------+-----------+
+|       122 |     95 |        27 |
++-----------+--------+-----------+
+
+
+""""""""""""""""""SOAL NO.2""""""""""""""""""""""""""""
+
+mysql> select count(employees.lastName), count(offices.phone), count(DISTINCT offices.country), count(products.productName), sum(products.quantityInStock), count(DISTINCT products.productVendor)
+    -> from employees, offices, products;
++---------------------------+----------------------+---------------------------------+-----------------------------+-------------------------------+----------------------------------------+
+| count(employees.lastName) | count(offices.phone) | count(DISTINCT offices.country) | count(products.productName) | sum(products.quantityInStock) | count(DISTINCT products.productVendor) |
++---------------------------+----------------------+---------------------------------+-----------------------------+-------------------------------+----------------------------------------+
+|                     17710 |                17710 |                               5 |                       17710 |                      89376091 |                                     13 |
++---------------------------+----------------------+---------------------------------+-----------------------------+-------------------------------+----------------------------------------+
+
+""""""""""""""""""SOAL NO.3""""""""""""""""""""""""""""
+mysql> select productlines.productLine as productLine, min(products.buyPrice) as minPrice, max(products.buyPrice) as maxPrice
+    -> from productlines, products
+    -> where productlines.productLine = products.productLine
+    -> group by productlines.productLine
+    -> order by productlines.productLine;
++------------------+----------+----------+
+| productLine      | minPrice | maxPrice |
++------------------+----------+----------+
+| Classic Cars     |    15.91 |   103.42 |
+| Motorcycles      |    24.14 |    91.02 |
+| Planes           |    29.34 |    77.27 |
+| Ships            |    33.30 |    82.34 |
+| Trains           |    26.72 |    67.56 |
+| Trucks and Buses |    24.92 |    84.76 |
+| Vintage Cars     |    20.61 |    86.70 |
++------------------+----------+----------+
+
+""""""""""""""""""SOAL NO.4""""""""""""""""""""""""""""
+mysql> select customers.customerName as customerName, customers.city as city, customers.country as country, sum(payments.amount) as total
+    -> from customers, payments
+    -> where payments.customerNumber = customers.customerNumber
+    -> group by customers.customerName
+    -> order by sum(payments.amount) desc limit 10;
++------------------------------+---------------+-------------+-----------+
+| customerName                 | city          | country     | total     |
++------------------------------+---------------+-------------+-----------+
+| Euro+ Shopping Channel       | Madrid        | Spain       | 715738.98 |
+| Mini Gifts Distributors Ltd. | San Rafael    | USA         | 584188.24 |
+| Australian Collectors, Co.   | Melbourne     | Australia   | 180585.07 |
+| Muscle Machine Inc           | NYC           | USA         | 177913.95 |
+| Dragon Souveniers, Ltd.      | Singapore     | Singapore   | 156251.03 |
+| Down Under Souveniers, Inc   | Auckland      | New Zealand | 154622.08 |
+| AV Stores, Co.               | Manchester    | UK          | 148410.09 |
+| Anna's Decorations, Ltd      | North Sydney  | Australia   | 137034.22 |
+| Corporate Gift Ideas Co.     | San Francisco | USA         | 132340.78 |
+| Saveley & Henriot, Co.       | Lyon          | France      | 130305.35 |
++------------------------------+---------------+-------------+-----------+
+
+""""""""""""""""""SOAL NO.5""""""""""""""""""""""""""""
+mysql> select customers.customerName as customername, products.productName as productname, orderdetails.quantityOrdered as quantityOrdered, orderdetails.priceEach as priceEach
+    -> from customers, payments, products, orderdetails, orders
+    -> where payments.paymentDate = "2003-06-05"
+    -> and payments.customerNumber = customers.customerNumber
+    -> and products.productCode = orderdetails.productCode
+    -> and orderdetails.orderNumber = orders.orderNumber
+    -> and customers.customerNumber = orders.customerNumber
+    -> and payments.customerNumber = orders.customerNumber
+    -> order by orderdetails.priceEach desc;
++-------------------+-------------------------------------------+-----------------+-----------+
+| customername      | productname                               | quantityOrdered | priceEach |
++-------------------+-------------------------------------------+-----------------+-----------+
+| Atelier graphique | 1965 Aston Martin DB5                     |              26 |    120.71 |
+| Atelier graphique | 1948 Porsche Type 356 Roadster            |              34 |    117.26 |
+| Atelier graphique | 1999 Indy 500 Monte Carlo SS              |              46 |    114.84 |
+| Atelier graphique | 1996 Moto Guzzi 1100i                     |              39 |    105.86 |
+| Atelier graphique | 1936 Harley Davidson El Knucklehead       |              32 |     60.57 |
+| Atelier graphique | 1966 Shelby Cobra 427 S/C                 |              50 |     43.27 |
+| Atelier graphique | 1938 Cadillac V-16 Presidential Limousine |              43 |     38.98 |
++-------------------+-------------------------------------------+-----------------+-----------+
